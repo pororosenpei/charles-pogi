@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Webpage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to my simple learning webpage</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="home">
+        <h2>Home</h2>
+        <p>Welcome to LearnWeb, your go-to Resources for educational content. Explore various topics and resources to enhance your knowledge.</p>
+        <img src="learning.jpg" alt="Students learning" class="responsive-img">
+        <button id="learn-more-btn" style="display: none;">Learn More</button>
+    </section>
+    <title>Voice Recognition Example</title>
+</head>
+<section id="video">
+    <h2>Sign Language Explanation</h2>
+    <video autoplay loop muted>
+        <source src="c:\Users\admin\Downloads\videoplayback (online-video-cutter.com).mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <p>
+        Welcome To My Website
+    </p>
+</section>
+<body>
+    <button id="start-btn">Start Voice Recognition</button>
+    <p id="transcript"></p>
+
+    <script>
+        const startBtn = document.getElementById('start-btn');
+        const transcriptDisplay = document.getElementById('transcript');
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+        recognition.continuous = true;
+    recognition.interimResults = false;
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[event.resultIndex][0].transcript.toLowerCase();
+        transcriptDisplay.textContent = `You said: ${transcript}`;
+
+        
+        if (transcript.includes('go to about')) {
+            window.location.href = 'about.html';
+        } else if (transcript.includes('go to resources')) {
+            window.location.href = 'resources.html';
+        } else if (transcript.includes('go to contact')) {
+            window.location.href = 'contact.html';
+        } else if (transcript.includes('back to home')) {
+            window.location.href = 'index.html';
+        }else if (transcript.includes('learn more')) {
+            window.location.href = 'learn-more.html'; // Replace with your actual URL
+        }
+    };
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+    };
+
+    startBtn.addEventListener('click', () => {
+        if (recognition.isRunning) {
+            recognition.stop();
+            startBtn.textContent = 'Start Voice Recognition';
+            localStorage.setItem('voiceRecognition', 'false');
+        } else {
+            recognition.start();
+            startBtn.textContent = 'Stop Voice Recognition';
+            localStorage.setItem('voiceRecognition', 'true');
+        }
+    });
+
+    recognition.onstart = () => {
+        recognition.isRunning = true; 
+    };
+
+    recognition.onend = () => {
+        recognition.isRunning = false; 
+        startBtn.textContent = 'Start Voice Recognition';
+    };
+
+    
+    window.addEventListener('load', () => {
+        if (localStorage.getItem('voiceRecognition') === 'true') {
+            recognition.start();
+            startBtn.textContent = 'Stop Voice Recognition';
+        }
+    });
+    </script>
+    
+    <footer>
+        <p>&copy; POROROCUTIE</p>
+    </footer>
+</body>
+</html>

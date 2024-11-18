@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Webpage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to my simple learning webpage</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="about">
+        <h2>About Learning</h2>
+        <img src="think.jpg" alt="Students learning" class="about">
+        <p>LearnWeb is dedicated to providing high-quality educational resources. Our mission is to make learning accessible to everyone.</p>
+        <p>Learning is a process through which individuals acquire new knowledge, skills, attitudes, or behaviors. It’s a fundamental aspect of human development and is crucial for personal growth, adaptation, and problem-solving. </p>
+        
+    </section>
+    <h3>Types of Learning</h3>
+        <p>1. Formal Learning: Structured and organized, often occurring in educational settings like schools or universities. Examples include classroom instruction, lectures, and formal courses.</p>
+            <p>2. Informal Learning: Unstructured and happens outside traditional educational environments. This includes learning through experiences, hobbies, social interactions, and self-directed study.
+            </p>
+<p>3. Experiential Learning: Gained through direct experience and reflection. It emphasizes learning from doing, such as through internships or practical projects.</p>
+<section>
+    <h3>Learning Theories</h3>
+    <p>1. Behaviorism: Focuses on observable behaviors and the ways they are learned through interaction with the environment. Classical and operant conditioning are key concepts.</p>
+    <p>2. Cognitivism: Emphasizes internal mental processes like thinking, memory, and problem-solving. It looks at how people understand, process, and store information.</p>
+    <p>3. Constructivism: Suggests that learners build on their existing knowledge and experiences to construct new understanding. It emphasizes active learning and problem-solving.</p>
+</section>
+<section>
+    <h3>Cognitive Processes in Learning</h3>
+<p>1. Attention: Focusing on specific stimuli or information.</p>
+<p>2. Memory: Storing and retrieving information. Includes working memory (short-term) and long-term memory.</p>
+<p>3. Perception: Interpreting and making sense of sensory information.</p>
+<p>4. Reasoning and Problem-Solving: Using logic and critical thinking to address challenges.</p>
+</section>
+<section>
+    <h3>Factors Influencing Learning</h3>
+    <p>1. Motivation: Intrinsic (internal drives) or extrinsic (external rewards). Motivation plays a crucial role in how engaged and persistent a learner is.</p>
+    <p>2. Prior Knowledge: Previous experiences and knowledge can shape new learning by providing a context or framework for understanding new information.</p>
+    <p>3. Learning Environment: The context and conditions in which learning occurs, including physical space, resources, and social dynamics.</p>
+</section>
+<section>
+    <h3>Learning Strategies</h3>
+    <p>1. Active Learning: Engaging directly with material through discussions, practice, or teaching others.</p>
+    <p>2. Self-Regulation: Setting goals, monitoring progress, and adjusting strategies based on feedback.</p>
+    <p>3. Metacognition: Reflecting on one's own learning processes and adjusting strategies to improve understanding and retention.</p>
+</section>
+<a href="https://hmct.dypvp.edu.in/blogs/five-reasons-why-learning-is-so-important-in-life" class="learn-more-btn">Learn More</a> <!-- "Learn More" Button -->
+
+<a href="index.html" class="back-btn">Back</a>
+
+<button id="start-btn">Start Voice Recognition</button>
+    <p id="transcript"></p>
+
+    <script>
+        const startBtn = document.getElementById('start-btn');
+        const transcriptDisplay = document.getElementById('transcript');
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+        recognition.continuous = true; // Allow continuous recognition
+    recognition.interimResults = false;
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[event.resultIndex][0].transcript.toLowerCase();
+        transcriptDisplay.textContent = `You said: ${transcript}`;
+
+        // Navigation based on voice command
+        if (transcript.includes('go to about')) {
+            window.location.href = 'about.html';
+        } else if (transcript.includes('go to resources')) {
+            window.location.href = 'resources.html';
+        } else if (transcript.includes('go to contact')) {
+            window.location.href = 'contact.html';
+        } else if (transcript.includes('back to home')) {
+            window.location.href = 'index.html';
+        }else if (transcript.includes('learn more')) {
+            window.location.href = 'https://hmct.dypvp.edu.in/blogs/five-reasons-why-learning-is-so-important-in-life'; // Replace with your actual URL
+        }
+    };
+
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+    };
+
+    startBtn.addEventListener('click', () => {
+        if (recognition.isRunning) {
+            recognition.stop();
+            startBtn.textContent = 'Start Voice Recognition';
+            localStorage.setItem('voiceRecognition', 'false');
+        } else {
+            recognition.start();
+            startBtn.textContent = 'Stop Voice Recognition';
+            localStorage.setItem('voiceRecognition', 'true');
+        }
+    });
+
+    recognition.onstart = () => {
+        recognition.isRunning = true; // Custom property to track state
+    };
+
+    recognition.onend = () => {
+        recognition.isRunning = false; // Reset when recognition ends
+        startBtn.textContent = 'Start Voice Recognition';
+    };
+
+    // Check local storage on page load
+    window.addEventListener('load', () => {
+        if (localStorage.getItem('voiceRecognition') === 'true') {
+            recognition.start();
+            startBtn.textContent = 'Stop Voice Recognition';
+        }
+    });
+    </script>
+
+    <footer>
+        <p>&copy; POROROCUTIE</p>
+    </footer>
+</body>
+</html>
+

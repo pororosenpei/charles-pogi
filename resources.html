@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educational Webpage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to my simple learning webpage</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <section id="resources">
+        <h2>Educational Resources</h2>
+        <ul>
+            <li><a href="https://www.w3schools.com/python/default.asp">Articles</a></li>
+            <li><a href="https://youtu.be/tvNBf-C0Dy8?si=i1TG3q-rpiblUOKp">Videos</a></li>
+            <li><a href="https://quizizz.com/?lng=en">Interactive Quizzes</a></li>
+        </ul>
+    </section>
+
+    <a href="about.html" class="back-btn">Back</a>
+    <button id="start-btn">Start Voice Recognition</button>
+    <p id="transcript"></p>
+
+    <script>
+        const startBtn = document.getElementById('start-btn');
+        const transcriptDisplay = document.getElementById('transcript');
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+        recognition.continuous = true; // Allow continuous recognition
+    recognition.interimResults = false;
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[event.resultIndex][0].transcript.toLowerCase();
+        transcriptDisplay.textContent = `You said: ${transcript}`;
+
+        // Navigation based on voice command
+        if (transcript.includes('go to about')) {
+            window.location.href = 'about.html';
+        } else if (transcript.includes('go to resources')) {
+            window.location.href = 'resources.html';
+        } else if (transcript.includes('go to contact')) {
+            window.location.href = 'contact.html';
+        } else if (transcript.includes('go to home')) {
+            window.location.href = 'index.html';
+        }else if (transcript.includes('show articles')) {
+            window.location.href = 'https://www.w3schools.com/python/default.asp'; 
+        } else if (transcript.includes('play video')) {
+            window.location.href = 'https://youtu.be/tvNBf-C0Dy8?si=i1TG3q-rpiblUOKp'; 
+        } else if (transcript.includes('start quiz')) {
+            window.location.href = 'https://quizizz.com/?lng=en';
+        }
+    };
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+    };
+
+    startBtn.addEventListener('click', () => {
+        if (recognition.isRunning) {
+            recognition.stop();
+            startBtn.textContent = 'Start Voice Recognition';
+            localStorage.setItem('voiceRecognition', 'false');
+        } else {
+            recognition.start();
+            startBtn.textContent = 'Stop Voice Recognition';
+            localStorage.setItem('voiceRecognition', 'true');
+        }
+    });
+
+    recognition.onstart = () => {
+        recognition.isRunning = true; // Custom property to track state
+    };
+
+    recognition.onend = () => {
+        recognition.isRunning = false; // Reset when recognition ends
+        startBtn.textContent = 'Start Voice Recognition';
+    };
+
+    // Check local storage on page load
+    window.addEventListener('load', () => {
+        if (localStorage.getItem('voiceRecognition') === 'true') {
+            recognition.start();
+            startBtn.textContent = 'Stop Voice Recognition';
+        }
+    });
+    </script>
+    <footer>
+        <p>&copy; POROROCUTIE</p>
+    </footer>
+</body>
+</html>
