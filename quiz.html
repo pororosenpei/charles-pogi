@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <link rel="stylesheet" href="ch.css">
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Interactive Quiz</h1>
+        <div id="quiz"></div>
+        <button id="next-button">Next</button>
+        <div id="progress"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "Who is most handsome on BSIT-3b?",
+                options: ["Jirro", "Von", "Ken", "Charles"],
+                answer: "Charles",
+            },
+            {
+                question: "What is 3 + 10?",
+                options: ["3", "13", "5", "6"],
+                answer: "13",
+            },
+            {
+                question: "What is orange?",
+                options: ["Color", "Fruit"],
+                answer: "Color",
+            },
+            {
+                question: "What is the full name of Sir Jo?",
+                options: ["Joel Altura", "Joel Arthur"],
+                answer: "Joel Altura",
+            },
+            {
+                question: "What is the color of Earth?",
+                options: ["White", "Blue", "Yellow"],
+                answer: "Blue",
+            },
+        ];
+
+        let currentQuestionIndex = 0;
+
+        const quizContainer = document.getElementById('quiz');
+        const nextButton = document.getElementById('next-button');
+        const progressDiv = document.getElementById('progress');
+
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            quizContainer.innerHTML = `
+                <div class="question">${currentQuestion.question}</div>
+                <ul class="options">
+                    ${currentQuestion.options.map((option) => `
+                        <li>
+                            <label>
+                                <input type="radio" name="option" value="${option}" />
+                                ${option}
+                            </label>
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            progressDiv.innerHTML = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
+        }
+
+        nextButton.addEventListener('click', () => {
+            const selectedOption = document.querySelector('input[name="option"]:checked');
+            if (selectedOption) {
+                if (selectedOption.value === quizData[currentQuestionIndex].answer) {
+                    currentQuestionIndex++;
+                    if (currentQuestionIndex < quizData.length) {
+                        loadQuestion();
+                    } else {
+                        showResults();
+                    }
+                } else {
+                    alert("Oopps! Try Again!");
+                }
+            } else {
+                alert("Please select an answer!");
+            }
+        });
+
+        function showResults() {
+            quizContainer.innerHTML = `
+                <h2>Quiz Successful!</h2>
+                <button onclick="restartQuiz()">Restart Quiz</button>
+            `;
+            nextButton.style.display = 'none';
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            nextButton.style.display = 'block';
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
